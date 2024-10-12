@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, minimum-scale=1">
   <title>Simple Canvas Game</title>
   <style>
     canvas {
@@ -207,6 +207,18 @@
     if (paddleX < canvas.width - paddleWidth) {
       paddleX += 15; // Di chuyển thanh ngang qua phải
     }
+  });
+
+  // Ngăn chặn zoom bằng cảm ứng
+  document.addEventListener('touchstart', function(e) {
+    if (e.touches.length > 1) {
+      e.preventDefault(); // Ngăn chặn các thao tác zoom bằng cảm ứng
+    }
+  });
+
+  // Ngăn chặn zoom bằng gesture
+  document.addEventListener('gesturestart', function(e) {
+    e.preventDefault();
   });
 </script>
 
