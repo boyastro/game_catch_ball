@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Canvas Game</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+      display: block;
+      margin: 0 auto;
+    }
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    .controls {
+      margin: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px; /* Tạo khoảng cách giữa các nút */
+    }
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      border: 2px solid #0095DD;
+      background-color: #0095DD;
+      color: white;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #007bb5; /* Màu nền thay đổi khi hover */
+    }
+  </style>
+</head>
+<body>
+
+<h1>Hứng Bóng - Simple Canvas Game</h1>
+<canvas id="gameCanvas" width="480" height="320"></canvas>
+<p>Điểm: <span id="score">0</span></p>
+<div class="controls">
+    <button id="leftBtn">Qua trái</button>
+    <button id="rightBtn">Qua phải</button>
+  </div>
+<div class="controls">
+  <button id="restartBtn">Bắt đầu lại</button>
+  <button id="endGameBtn">Kết thúc trò chơi</button>
+</div>
+
+<script>
+  // Lấy phần tử canvas và đối tượng đồ họa
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+
+  // Khởi tạo các biến
+  let ballRadius = 10;
+  let x = canvas.width / 2;
+  let y = canvas.height - 30;
+  let dx = 2; // tốc độ di chuyển bóng theo trục x
+  let dy = -2; // tốc độ di chuyển bóng theo trục y
+  let paddleHeight = 10;
+  let paddleWidth = 75;
+  let paddleX = (canvas.width - paddleWidth) / 2; // vị trí thanh ngang
+  let rightPressed = false;
+  let leftPressed = false;
+  let score = 0;
+  let isGameOver = false; // Trạng thái game over
+  let isGameRunning = true; // Trạng thái của trò chơi
+
+  // Lấy các nút điều khiển
+  const restartBtn = document.getElementById('restartBtn');
+  const endGameBtn = document.getElementById('endGameBtn');
+  const leftBtn = document.getElementById('leftBtn');
+  const rightBtn = document.getElementById('rightBtn');
+
+  // Sự kiện nhấn phím
+  document.addEventListener("keydown", keyDownHandler, false);
+  document.addEventListener("keyup", keyUpHandler, false);
+
+  function keyDownHandler(e) {
+    if (e.key === "Right" || e.key === "ArrowRight") {
+      rightPressed = true;
+    } else if (e.key === "Left" || e.key === "ArrowLeft") {
+      leftPressed = true;
+    }
+  }
+
+  function keyUpHandler(e) {
+    if (e.key === "Right" || e.key === "ArrowRight") {
+      rightPressed = false;
+    } else if (e.key === "Left" || e.key === "ArrowLeft") {
+      leftPressed = false;
+    }
+  }
+
+  // Vẽ quả bóng
+  function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  // Vẽ thanh ngang
+  function drawPaddle() {
+    ctx.beginPath();
+    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  // Cập nhật điểm
+  function updateScore() {
+    document.getElementById('score').textContent = score;
+  }
+
+  // Kiểm tra va chạm và cập nhật trò chơi
+  function draw() {
+    if (isGameOver) {
+      ctx.font = "30px Arial";
+      ctx.fillStyle = "red";
+      ctx.fillText("Game Over!", canvas.width / 2 - 80, canvas.height / 2);
+      return;
+    }
+
+    if (!isGameRunning) {
+      ctx.font = "30px Arial";
+      ctx.fillStyle = "red";
+      ctx.fillText("Trò chơi đã kết thúc!", canvas.width / 2 - 120, canvas.height / 2);
+      return;
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Xóa khung hình trước khi vẽ lại
+    drawBall();
+    drawPaddle();
+    updateScore();
+
+    // Kiểm tra va chạm với mép tường
+    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+      dx = -dx;
+    }
+    if (y + dy < ballRadius) {
+      dy = -dy;
+    } else if (y + dy > canvas.height - ballRadius) {
+      // Kiểm tra va chạm với thanh ngang
+      if (x > paddleX && x < paddleX + paddleWidth) {
+        dy = -dy;
+        score++; // Tăng điểm khi bóng va chạm với thanh
+      } else {
+        isGameOver = true; // Kết thúc trò chơi
+      }
+    }
+
+    // Di chuyển bóng
+    x += dx;
+    y += dy;
+
+    // Điều khiển thanh ngang
+    if (rightPressed && paddleX < canvas.width - paddleWidth) {
+      paddleX += 7;
+    } else if (leftPressed && paddleX > 0) {
+      paddleX -= 7;
+    }
+
+    // Vẽ lại khung hình tiếp theo
+    requestAnimationFrame(draw);
+  }
+
+  // Bắt đầu trò chơi
+  draw();
+
+  // Hàm reset trò chơi
+  function resetGame() {
+    isGameOver = false;
+    isGameRunning = true;
+    score = 0;
+    x = canvas.width / 2;
+    y = canvas.height - 30;
+    dx = 2;
+    dy = -2;
+    paddleX = (canvas.width - paddleWidth) / 2;
+    draw(); // Bắt đầu lại
+  }
+
+  // Sự kiện nút "Bắt đầu lại"
+  restartBtn.addEventListener("click", resetGame);
+
+  // Sự kiện nút "Kết thúc trò chơi"
+  endGameBtn.addEventListener("click", function() {
+    isGameRunning = false;
+  });
+
+  // Sự kiện nút "Qua trái"
+  leftBtn.addEventListener("click", function() {
+    if (paddleX > 0) {
+      paddleX -= 7; // Di chuyển thanh ngang qua trái
+    }
+  });
+
+  // Sự kiện nút "Qua phải"
+  rightBtn.addEventListener("click", function() {
+    if (paddleX < canvas.width - paddleWidth) {
+      paddleX += 7; // Di chuyển thanh ngang qua phải
+    }
+  });
+</script>
+
+</body>
+</html>
