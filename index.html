@@ -198,14 +198,14 @@
   // Sự kiện nút "Qua trái"
   leftBtn.addEventListener("click", function() {
     if (paddleX > 0) {
-      paddleX -= 7; // Di chuyển thanh ngang qua trái
+      paddleX -= 15; // Di chuyển thanh ngang qua trái
     }
   });
 
   // Sự kiện nút "Qua phải"
   rightBtn.addEventListener("click", function() {
     if (paddleX < canvas.width - paddleWidth) {
-      paddleX += 7; // Di chuyển thanh ngang qua phải
+      paddleX += 15; // Di chuyển thanh ngang qua phải
     }
   });
 </script>
