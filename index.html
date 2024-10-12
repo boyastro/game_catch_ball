@@ -155,9 +155,18 @@
     } else if (y + dy > canvas.height - ballRadius) {
       // Kiểm tra va chạm với thanh ngang
       if (x > paddleX && x < paddleX + paddleWidth) {
-        dy = -dy;
+        dy = -dy; // Chỉnh lại hướng bóng theo chiều dọc
+
+        // Tính toán vị trí va chạm trên thanh ngang để thay đổi hướng bóng
+        let relativeX = x - (paddleX + paddleWidth / 2); // Vị trí va chạm tương đối với trung tâm thanh ngang
+        let normalizedX = relativeX / (paddleWidth / 2); // Chuẩn hóa giá trị này để nằm trong khoảng [-1, 1]
+
+        let angle = normalizedX * Math.PI / 4; // Tạo góc quay từ -45° đến 45°
+
+        dx = 2 * Math.sin(angle); // Tính lại vận tốc theo trục X
+        dy = -2 * Math.cos(angle); // Tính lại vận tốc theo trục Y
+
         score++; // Tăng điểm
-        changeBallDirection(); // Thay đổi quỹ đạo và tăng tốc độ
       } else {
         isGameOver = true; // Kết thúc trò chơi
       }
@@ -205,27 +214,6 @@
     if (paddleX < canvas.width - paddleWidth) {
       paddleX += 15;
     }
-  });
-
-  document.addEventListener('touchstart', function(e) {
-    if (e.touches.length > 1) {
-      e.preventDefault();
-    }
-  });
-
-  document.addEventListener('gesturestart', function(e) {
-    e.preventDefault();
-  });
-
-  let lastTap = 0;
-  document.body.addEventListener('touchend', function(e) {
-    let currentTime = new Date().getTime();
-    let timeDiff = currentTime - lastTap;
-    
-    if (timeDiff < 300 && timeDiff > 0) {
-      e.preventDefault();
-    }
-    lastTap = currentTime;
   });
 
   // Bắt đầu trò chơi
