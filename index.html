@@ -41,6 +41,7 @@
 <h1>Ping Pong</h1>
 <canvas id="gameCanvas" width="320" height="320"></canvas>
 <p>Điểm: <span id="score">0</span></p>
+<p>Level: <span id="level">1</span></p>
 <div class="controls">
     <button id="leftBtn">Qua trái</button>
     <button id="rightBtn">Qua phải</button>
@@ -48,6 +49,12 @@
 <div class="controls">
   <button id="restartBtn">Bắt đầu lại</button>
   <button id="endGameBtn">Kết thúc trò chơi</button>
+</div>
+<div class="controls">
+  <button id="level1Btn">Level 1</button>
+  <button id="level2Btn">Level 2</button>
+  <button id="level3Btn">Level 3</button>
+  <button id="level4Btn">Level 4</button>
 </div>
 
 <script>
@@ -66,6 +73,7 @@
   let rightPressed = false;
   let leftPressed = false;
   let score = 0;
+  let level = 1;
   let isGameOver = false;
   let isGameRunning = true;
 
@@ -73,6 +81,12 @@
   const endGameBtn = document.getElementById('endGameBtn');
   const leftBtn = document.getElementById('leftBtn');
   const rightBtn = document.getElementById('rightBtn');
+  const level1Btn = document.getElementById('level1Btn');
+  const level2Btn = document.getElementById('level2Btn');
+  const level3Btn = document.getElementById('level3Btn');
+  const level4Btn = document.getElementById('level4Btn');
+  const scoreElem = document.getElementById('score');
+  const levelElem = document.getElementById('level');
 
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
@@ -110,7 +124,8 @@
   }
 
   function updateScore() {
-    document.getElementById('score').textContent = score;
+    scoreElem.textContent = score;
+    levelElem.textContent = level;
   }
 
   // Hàm thay đổi quỹ đạo và tăng tốc độ bóng
@@ -124,6 +139,23 @@
     // Tăng tốc độ bóng
     dx *= 1.05;
     dy *= 1.05;
+  }
+
+  // Hàm thay đổi tốc độ theo cấp độ
+  function changeSpeedForLevel() {
+    if (level === 1) {
+      dx = 2;
+      dy = -2;
+    } else if (level === 2) {
+      dx = 3;
+      dy = -3;
+    } else if (level === 3) {
+      dx = 4;
+      dy = -4;
+    } else if (level === 4) {
+      dx = 5;
+      dy = -5;
+    }
   }
 
   function draw() {
@@ -190,11 +222,9 @@
     isGameOver = false;
     isGameRunning = true;
     score = 0;
-    x = canvas.width / 2;
-    y = canvas.height - 30;
-    dx = 2;
-    dy = -2;
+    level = 1;
     paddleX = (canvas.width - paddleWidth) / 2;
+    changeSpeedForLevel(); // Cập nhật tốc độ bóng theo cấp độ
     draw();
   }
 
@@ -214,6 +244,30 @@
     if (paddleX < canvas.width - paddleWidth) {
       paddleX += 15;
     }
+  });
+
+  level1Btn.addEventListener("click", function() {
+    level = 1;
+    changeSpeedForLevel();
+    draw();
+  });
+
+  level2Btn.addEventListener("click", function() {
+    level = 2;
+    changeSpeedForLevel();
+    draw();
+  });
+
+  level3Btn.addEventListener("click", function() {
+    level = 3;
+    changeSpeedForLevel();
+    draw();
+  });
+
+  level4Btn.addEventListener("click", function() {
+    level = 4;
+    changeSpeedForLevel();
+    draw();
   });
 
   // Bắt đầu trò chơi
