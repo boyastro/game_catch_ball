@@ -22,7 +22,7 @@
     }
     button {
       padding: 10px 15px;
-      margin: 5px;
+      margin: 1px;
       font-size: 16px;
       cursor: pointer;
       border: 2px solid #0095DD;
@@ -34,13 +34,21 @@
     button:hover {
       background-color: #007bb5;
     }
+    p {
+    display: block;
+    margin-block-start: 3px;
+    margin-block-end: 1px;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+}
   </style>
 </head>
 <body>
 
 <h1>Ping Pong</h1>
 <canvas id="gameCanvas" width="320" height="320"></canvas>
-<p>Điểm: <span id="score">0  Level: <span id="level">1</span></p>
+<p>Điểm: <span id="score">0</span></p>
 <p>Level: <span id="level">1</span></p>
 <div class="controls">
     <button id="leftBtn">Qua trái</button>
@@ -147,14 +155,14 @@
       dx = 2;
       dy = -2;
     } else if (level === 2) {
+      dx = 2.3;
+      dy = -2.3;
+    } else if (level === 3) {
       dx = 2.5;
       dy = -2.5;
-    } else if (level === 3) {
-      dx = 2.7;
-      dy = -2.7;
     } else if (level === 4) {
-      dx = 3;
-      dy = -3;
+      dx = 2.8;
+      dy = -2.8;
     }
   }
 
