@@ -220,6 +220,19 @@
   document.addEventListener('gesturestart', function(e) {
     e.preventDefault();
   });
+
+  // Ngừng sự kiện double tap (ấn đúp)
+  let lastTap = 0;
+
+  document.body.addEventListener('touchend', function(e) {
+    let currentTime = new Date().getTime();
+    let timeDiff = currentTime - lastTap;
+    
+    if (timeDiff < 300 && timeDiff > 0) {
+      e.preventDefault(); // Ngăn chặn hành động zoom khi ấn đúp
+    }
+    lastTap = currentTime;
+  });
 </script>
 
 </body>
