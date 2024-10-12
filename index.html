@@ -15,7 +15,7 @@
       font-family: Arial, sans-serif;
     }
     .controls {
-      margin: 20px;
+      margin: 5px;
       display: flex;
       justify-content: center;
       gap: 20px;
@@ -40,12 +40,12 @@
 
 <h1>Ping Pong</h1>
 <canvas id="gameCanvas" width="320" height="320"></canvas>
-<p>Điểm: <span id="score">0</span></p>
+<p>Điểm: <span id="score">0  Level: <span id="level">1</span></p>
 <p>Level: <span id="level">1</span></p>
 <div class="controls">
     <button id="leftBtn">Qua trái</button>
     <button id="rightBtn">Qua phải</button>
-  </div>
+</div>
 <div class="controls">
   <button id="restartBtn">Bắt đầu lại</button>
   <button id="endGameBtn">Kết thúc trò chơi</button>
@@ -147,14 +147,14 @@
       dx = 2;
       dy = -2;
     } else if (level === 2) {
+      dx = 2.5;
+      dy = -2.5;
+    } else if (level === 3) {
+      dx = 2.7;
+      dy = -2.7;
+    } else if (level === 4) {
       dx = 3;
       dy = -3;
-    } else if (level === 3) {
-      dx = 4;
-      dy = -4;
-    } else if (level === 4) {
-      dx = 5;
-      dy = -5;
     }
   }
 
